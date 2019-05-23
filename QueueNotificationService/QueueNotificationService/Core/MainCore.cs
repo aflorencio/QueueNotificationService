@@ -62,7 +62,7 @@ namespace QueueNotificationService
             document = db.Get(ObjectId.Parse(id));
             document = data;
 
-            db.Update(data);
+            db.Update(data); //SEGURO QUE TIENES QUE ENVIAR EL DATA O EL DOCUMENT. SI ES ASI ME CAMBIA LA ID FUNCIONA ESTO BIEN?
 
         }
 

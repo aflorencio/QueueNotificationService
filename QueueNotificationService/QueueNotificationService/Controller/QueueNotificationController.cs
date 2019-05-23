@@ -56,7 +56,7 @@ namespace QueueNotificationService
             string jsonRAW = context.Request.Payload;
             dynamic dataId = JsonConvert.DeserializeObject<object>(jsonRAW);
 
-            DMModel data = converse(dataId);
+            DMModel data = Filtro(dataId);
 
             _.Create(data);
 
@@ -79,7 +79,7 @@ namespace QueueNotificationService
 
             dynamic dataId = JsonConvert.DeserializeObject<object>(jsonRAW);
 
-            DMModel data = converse(dataId);
+            DMModel data = Filtro(dataId);
 
             _.Update(id, data);
 
@@ -91,7 +91,7 @@ namespace QueueNotificationService
 
         #endregion
 
-        public DMModel converse(dynamic dataId) {
+        public DMModel Filtro(dynamic dataId) {
 
             DMModel data = new DMModel();
 
