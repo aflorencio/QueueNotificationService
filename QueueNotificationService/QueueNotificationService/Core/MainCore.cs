@@ -15,14 +15,19 @@ namespace QueueNotificationService
         public IMongoCRUD<DMModel> db;
         public MainCore(string server, string database)
         {
-            IMongoCRUD<DMModel> db = new MongoCRUD<DMModel>(server, database);
+            db = new MongoCRUD<DMModel>(server, database);
         }
 
         #region CREATE
 
         public void Create(DMModel data)
         {
-            db.Create(data);
+            try
+            {
+                db.Create(data);
+            }
+            catch (Exception e) {
+            }
         }
 
         #endregion
@@ -34,9 +39,12 @@ namespace QueueNotificationService
             filter.Add("_id", new BsonDocument()
                     .Add("$exists", new BsonBoolean(true))
             );
+            Mongo.CRUD.Models.SearchOptions hola = new Mongo.CRUD.Models.SearchOptions();
 
-            var data = db.Search(filter).Documents.ToList();
-
+            hola.PageSize = 10;
+            hola.PageNumber = 2;
+            var data = db.Search(filter, hola).Documents .ToList();
+            
             return data;
 
         }
@@ -62,7 +70,7 @@ namespace QueueNotificationService
             document = db.Get(ObjectId.Parse(id));
             document = data;
 
-            db.Update(data); //SEGURO QUE TIENES QUE ENVIAR EL DATA O EL DOCUMENT. SI ES ASI ME CAMBIA LA ID FUNCIONA ESTO BIEN?
+            db.Update(document); //SEGURO QUE TIENES QUE ENVIAR EL DATA O EL DOCUMENT. SI ES ASI ME CAMBIA LA ID FUNCIONA ESTO BIEN?
 
         }
 

@@ -16,6 +16,7 @@ using DMModel = QueueNotificationService.MQueueNotification;
 
 namespace QueueNotificationService
 {
+    [RestResource]
     class QueueNotificationController
     {
         MainCore _ = new MainCore("mongodb://51.83.73.69:27017", "QueueNotificationService");
@@ -56,7 +57,18 @@ namespace QueueNotificationService
             string jsonRAW = context.Request.Payload;
             dynamic dataId = JsonConvert.DeserializeObject<object>(jsonRAW);
 
-            DMModel data = Filtro(dataId);
+            DMModel data = new DMModel();
+
+            data.fecha = DateTime.Now;
+            data.leido = dataId?.leido;
+            data.prioridad = dataId?.prioridad;
+            data.from = new Regex(@"^[0-9a-fA-F]{24}$").Match(dataId?.from.ToString()).Success == true ? ObjectId.Parse(dataId?.from.ToString()) : null;
+            data.to = new Regex(@"^[0-9a-fA-F]{24}$").Match(dataId?.to.ToString()).Success == true ? ObjectId.Parse(dataId?.to.ToString()) : null;
+            data.mensaje = dataId?.mensaje;
+            data.serviceID = new Regex(@"^[0-9a-fA-F]{24}$").Match(dataId?.serviceID.ToString()).Success == true ? ObjectId.Parse(dataId?.serviceID.ToString()) : null;
+            data.tipoServicio = dataId?.tipoServicio;
+            data.toType = dataId?.toType;
+
 
             _.Create(data);
 
@@ -79,23 +91,10 @@ namespace QueueNotificationService
 
             dynamic dataId = JsonConvert.DeserializeObject<object>(jsonRAW);
 
-            DMModel data = Filtro(dataId);
-
-            _.Update(id, data);
-
-            context.Response.SendResponse("Updated!");
-            return context;
-
-        }
-
-
-        #endregion
-
-        public DMModel Filtro(dynamic dataId) {
-
             DMModel data = new DMModel();
 
-            data.fecha = DateTime.Now;
+            data._id = ObjectId.Parse(id);
+            //data.fecha = DateTime.Now;
             data.leido = dataId?.leido;
             data.prioridad = dataId?.prioridad;
             data.from = new Regex(@"^[0-9a-fA-F]{24}$").Match(dataId?.from.ToString()).Success == true ? ObjectId.Parse(dataId?.from.ToString()) : null;
@@ -106,7 +105,14 @@ namespace QueueNotificationService
             data.toType = dataId?.toType;
 
 
-            return data;
+            _.Update(id, data);
+
+            context.Response.SendResponse("Updated!");
+            return context;
+
         }
+
+
+        #endregion
     }
 }
