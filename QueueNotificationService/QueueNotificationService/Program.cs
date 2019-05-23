@@ -26,7 +26,7 @@ namespace QueueNotificationService
                     {
                         case "start":
                             Console.WriteLine("Starting service...");
-                            serverStandar.Port = "5009";
+                            serverStandar.Port = "5006";
                             serverStandar.Host = "*";
                             serverStandar.Start();
                             Console.Title = "[ON]  " + nameService + " " + v;
@@ -39,7 +39,7 @@ namespace QueueNotificationService
 
                             using (var server = new RestServer())
                             {
-                                server.Port = "5009";
+                                server.Port = "5006";
                                 server.Host = "*";
                                 server.LogToConsole().Start();
                                 Console.Title = "[ON]  " + nameService + " " + v;
