@@ -42,7 +42,7 @@ namespace QueueNotificationService
             Mongo.CRUD.Models.SearchOptions hola = new Mongo.CRUD.Models.SearchOptions();
 
             hola.PageSize = 10;
-            hola.PageNumber = 2;
+            hola.PageNumber = 1;
             var data = db.Search(filter, hola).Documents .ToList();
             
             return data;
